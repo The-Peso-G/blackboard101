@@ -4,7 +4,8 @@
 # Python 2.7.6 and relies on bitcoind & bitcoinrpc & wobine's github connection file
 # We had to change the bitcoinrpc 'connection.py' file to add multisig support
 # https://github.com/wobine/blackboard101/blob/master/wbn_multisigs_pt1_create-address.py
-
+# Modify:
+#      ask private key from user. so we could use the code in real situation
 
 from bitcoinrpc.authproxy import AuthServiceProxy
 
@@ -13,20 +14,20 @@ bitcoin = AuthServiceProxy("http://test:123456@127.0.0.1:8332") #creates an obje
 pubkey = dict()
 
 
-print "请输入公钥，公钥可以由命令[validate address]的输出pubKey字段得到"
-pubkey[0] = str(raw_input("请输入管理者1的公钥："))
-pubkey[1] = str(raw_input("请输入管理者2的公钥："))
-pubkey[2] = str(raw_input("请输入管理者3的公钥："))
-n = int(raw_input("请输入几个私钥可以解锁："))
+print "Please input your pubKey, which is the oubput of command [validate address]"
+pubkey[0] = str(raw_input("Please input the pubkey owned by Partner 1："))
+pubkey[1] = str(raw_input("Please input the pubkey owned by Partner 2："))
+pubkey[2] = str(raw_input("Please input the pubkey owned by Partner 3："))
+n = int(raw_input("Please input the number which can sign the address："))
 threeaddy = [pubkey[0],pubkey[1],pubkey[2]]
-print "多重签名地址是："
+print "The multi-sig address is ："
 multisigaddy = bitcoin.addmultisigaddress(n,threeaddy)
 multiaddyandredeem = (bitcoin.createmultisig(n,threeaddy))
 print len(multisigaddy),"chars - ", multisigaddy
 print
 print "redeemScript -", len(multiaddyandredeem["redeemScript"]), "chars -",multiaddyandredeem["redeemScript"]
 print
-print "现在可以把上面的输出都存起来，方便以后花费时构建输出单"
+print "Now you can copy all this ouput text and save it so you'll be ready for spend it"
 
 
 
